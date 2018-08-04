@@ -6,8 +6,9 @@ notebooks) are provided.
 
 ## Questions to answer
 
- 1. What are these tools, and how do they work?
- 2. 
+ 1. What are these tools?
+ 2. How do they work?
+ 3. How do I get started learning?
 
 ## Logistics
 
@@ -75,3 +76,5 @@ Never fear, my student! We have tools that are going to help you. Today we are g
  - ask (and answer) what regions of the analysis are revealed for each term
  - How did neurosynth come about?
  - Briefly review what is going on with NeuroSynth
+
+Finish with a little demo, and mention of notebooks / containers provided in this repository!
