@@ -13,8 +13,7 @@ notebooks) are provided.
 ## Logistics
 
  - Should be a high level overview (with a little detail about "behind the scenes")
- - 30-45 minutes (15 minutes each?)
- 
+ - 30-45 minutes (15 minutes each?) 
 
 ## Scenario
 
@@ -22,7 +21,8 @@ So welcome to graduate school! Your fresly minted out of undergrad, you studied 
 study and write about amazing things about the human brain. Actually, you have a very particular interest,
 and you come to Stanford and join the lab of Russ Poldrack.
 
-Russ is a cognitive psychologist
+Russ is a cognitive psychologist. Look him up on [wikipedia](). He studies what is going on in the brain during risk taking,
+or general decision making
 
 DEFINE cognitive psychologist: it means that he...
 
