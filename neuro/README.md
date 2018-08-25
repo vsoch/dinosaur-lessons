@@ -1,21 +1,30 @@
 # NeuroSynth and Cognitive Atlas
 
 This dinosaur lesson will cover a high level introduction to NeuroSynth and the
-Cognitive Atlas. The lesson content and associated practice exercises (via container based
+Cognitive Atlas. The lesson content and associated practice exercises (via jupyter
 notebooks) are provided.
 
-## Questions to answer
+## What will I learn today?
 
  1. What are these tools?
- 2. How do they work?
+ 2. Why would I want to use them?
  3. How do I get started learning?
+
+## Content
+
+ - [Video Lesson](https://youtu.be/c07MYFA5xPU) This is the current video lesson (YouTube). Make sure to watch in HD
+ - [Notebook Lesson](cognitive-atlas-intro.ipynb) A quick walk through of using the cognitiveatlas api.
+
+# Development of Lesson
+
+This is a documented development of the content.
 
 ## Logistics
 
- - Should be a high level overview (with a little detail about "behind the scenes")
+ - This is a high level overview (with a little detail about "behind the scenes")
  - 30-45 minutes (15 minutes each?) 
 
-## Scenario
+## Original Transcript
 
 So welcome to graduate school! Your fresly minted out of undergrad, you studied psychology and are ready to
 study and write about amazing things about the human brain. Actually, you have a very particular interest,
@@ -77,4 +86,4 @@ Never fear, my student! We have tools that are going to help you. Today we are g
  - How did neurosynth come about?
  - Briefly review what is going on with NeuroSynth
 
-Finish with a little demo, and mention of notebooks / containers provided in this repository!
+Finish with a little demo, and mention of notebooks provided in this repository!
