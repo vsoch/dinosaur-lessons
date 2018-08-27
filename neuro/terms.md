@@ -14,3 +14,4 @@ These are kinds of entities in the Cognitive Atlas.
 ## Neurosynth
 
  - **meta-analysis** is a statistical approach to combine the results of several studies. Traditionally, you might have to read say, 100 papers. With a tool like neurosynth, you can use an analytical method to (more more easily) do the same, and produce a statistical brain map to summarize what you find.
+

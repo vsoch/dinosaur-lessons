@@ -16,6 +16,17 @@ notebooks) are provided.
  - [Notebook Lesson](notebook/cognitive-atlas-intro.ipynb) A quick walk through of using the cognitiveatlas api.
  - [Terms](terms.md) that are important to remember from the lesson.
 
+
+## Resources
+
+ - [Lesson Materials](https://github.com/vsoch/dinosaur-lessons/tree/master/neuro)
+ - [The Cognitive Atlas](https://www.cognitiveatlas.org)
+ - [Neurosynth](http://neurosynth.org)
+ - [Neurovault](https://www.neurovault.org)
+ - [The Poldrack](Lab at Stanford: https://poldracklab.stanford.edu)
+ - [OpenNeuro](https://www.openneuro.org)
+ - [Nimare](https://www.github.com/neurostuff/NiMare)
+
 # Development of Lesson
 
 This is a documented development of the content.
