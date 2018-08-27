@@ -14,6 +14,7 @@ notebooks) are provided.
 
  - [Video Lesson](https://youtu.be/c07MYFA5xPU) This is the current video lesson (YouTube). Make sure to watch in HD
  - [Notebook Lesson](notebook/cognitive-atlas-intro.ipynb) A quick walk through of using the cognitiveatlas api.
+ - [Terms](terms.md) that are important to remember from the lesson.
 
 # Development of Lesson
 
