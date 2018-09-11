@@ -1,8 +1,70 @@
 # Introduction to Containers
 
-## History of Containers
+A container is a portable encapsulation of an environment. It's a
+way for you to package an entire operating system, libraries, and
+dependencies in a package that you can move and run anywhere.
+That is the quick and dirty definition, but today we are going
+to delive a little more into what this actually means. We will cover:
 
-Need to talk about virtualization and introduce the idea of a VM.
+ - Container basics
+   - The problems that containers solve
+ - Virtualization
+   - What is a virtual machine?
+   - Virtual machines vs. containers
+   - Container vs. Host
+ - Definition of Container
+   - Let's start with your computer
+   - What is a container?
+   - Containers vs. Container images.
+ - Using containers
+   - How do I use a container on my host?
+   - How are they created?
+ - Why might we use containers?
+   - Operational benefits
+     - automation
+     - portability
+     - access control
+   - Runtime benefits
+ - Container technologies (?)
+   - Docker (?)
+
+## Container Basics
+
+### What problems do containers solve?
+
+ - Variable environments
+**not finished**
+
+## Virtualization
+First we talk about virtualization and introduce the idea of a VM.
+
+A hypervisor is based on emulating hardware. When we emulate
+hardware, this is called virtualization, and some of you are probably familiar with the term "virtual machine."
+
+The biggest difference between containers and hypervisors are that **hypervisor emulation is based on emulating hardware**. So we take a machine and it emulates virtual hardware, and then bring up 
+another operating system on top of that hardware.
+
+Containers are about virtualizing the subsystems of the operating system itself. We take services that the operating system provides (networking, filesystem, etc.) and provide them in a way that is virtuaizable. So I can bring up different copies of an operating system on the same kernel. We are using features of the kernel. So you can think of it like building on the level of the kernel instead of hypervisors that build one level down, and try to emulate the hardware.
+
+ - Containers: have a **single** kernels running underneath them
+ - Hypervisors: have **multiple** kernels
+
+A cool result of this, given that you have a single kernel, if you fix or update that kernel, all the "guests" running off it also get patched.
+
+### What is a virtual machine?
+
+A virtual machine runs on a hypervisor, which is (definition). With a virtual machine, you have a virtual hardware layer, an 
+entire operating system, and then libraries and applications on top of it. We can size the VM however we need - meaning it could take up.
+
+### Virtual Machine vs Containers
+Draw comparison between virtual machines
+
+## Host vs. Container
+
+Running on host, you are using software, libraries, and dependencies on the host
+The container is totally isolated - it brings all its dependencies in an environment
+isolated from the operating system.
+
 
 ## Introduction to Your Computer
 
@@ -59,7 +121,16 @@ Draw box to represent host, and box to represent registry, and some client in be
 Explain that you can pull images from the registry to run on the host, 
 you get software and completely different OS on the host without installing anything.
 
-### Why?
+### Building Containers
+
+If you are a researcher, your interaction with container technology is going to
+look like this:
+
+ 1. write a recipe, a text file that defines a base image, and commands to execute on top of it
+ 2. build the recipe into an image
+ 3. run / exec or otherwise interact with the image to create a container (an instance of the image)
+
+### Why, in terms of Operational Benefits?
 
 Why would I want to do this? If you think about it, the underlying rationale for having
 and using containers is summarized by a need:
@@ -95,28 +166,23 @@ is very error prone. Let's start with kinds of states:
  - read/write content needed at runtime can also be written into a container, but it will again go away when you stop the container.
  - read/write content that you write into a mounted volume to the container will persist on the host after.
 
-These three different states you may not have thought about if you were just deploying software on the host, and then when someone else tries to deploy your thing, you realize that they are missing a file that was in the third category. It's hard to realize because it's mixed with the software and files that should be ephemeral but needed to be downloaded to install on the host.
+These three different states you may not have thought about if you were just deploying software on the host, and then when someone else tries to deploy your thing, you realize that they are missing a file that was in the third category. It's hard to realize because it's mixed with the software and files that should be ephemeral but needed to be downloaded to install on the host. These states
+can be summarized as "application state"  vs. configuration state.
 
 The more parts of an application you can get into the read only state, the easier it is to bring
 down an entire application and bring it up again, without relying on any persistent content like
 a specific configuration file, for which a change could break everything.
 
-### Building Containers
+### Why, in terms of Runtime Benefits?
 
-If you are a researcher, your interaction with container technology is going to
-look like this:
+> I want dynamic and stateless
 
- 1. write a recipe, a text file that defines a base image, and commands to execute on top of it
- 2. build the recipe into an image
- 3. run / exec or otherwise interact with the image to create a container (an instance of the image)
+You can create and throw away containers incrediby easy. It gives you the ability to do horizontal scaling.
+Because of these stateless workloads, we can talk about scheduling and clustering. 
 
-## Differences between Host and Container
-
-Running on host, you are using software, libraries, and dependencies on the host
-The container is totally isolated - it brings all its dependencies in an environment
-isolated from the operating system.
 
 Resources:
 
  - [VMWare: Ben Corrie Sr. Staff Engineer](https://www.vmware.com/solutions/cloud-native-apps.html)
  - [RedHat: Control Groups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01)
+ - [Beginners Guide to Containers Technology](https://www.youtube.com/watch?v=YsYzMPptB-k)
