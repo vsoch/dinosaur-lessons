@@ -12,6 +12,7 @@ to delive a little more into what this actually means. We will cover:
    - What is a virtual machine?
    - Virtual machines vs. containers
    - Container vs. Host
+   - The linux container API
  - Definition of Container
    - Let's start with your computer
    - What is a container?
@@ -25,15 +26,26 @@ to delive a little more into what this actually means. We will cover:
      - portability
      - access control
    - Runtime benefits
- - Container technologies (?)
+ - Container providers
+   - Parallels (Odin)
    - Docker (?)
 
 ## Container Basics
 
 ### What problems do containers solve?
 
- - Variable environments
-**not finished**
+> But it ran on my computer!
+
+We have differences in environments, hardware, and even security, and this makes sharing of applications challenging, leading to the commonality of the phrase above.
+
+ - Portability
+ - Development Environments
+   - You can spin up an entire set of components for a specific development environment, and then bring up another isolated one all at once! Containers are a dream for different kinds of developers.
+ - Continuous Integration
+  - The same is true for testing, You can easily test across operating systems without leaving a single host.
+ - Ephemeral
+   - Don't run things when you don't need to
+   - Don't get locked in to one cloud vendor
 
 ## Virtualization
 First we talk about virtualization and introduce the idea of a VM.
@@ -51,6 +63,8 @@ Containers are about virtualizing the subsystems of the operating system itself.
 
 A cool result of this, given that you have a single kernel, if you fix or update that kernel, all the "guests" running off it also get patched.
 
+For memory, a hypervisor can only see pages. It doesn't know what each guest is doing. WIth a container, under a single kernel the single kernel can see all objects and usage inside each container to make resource decisions. For this reason the resource decisions are made much more efficient.
+
 ### What is a virtual machine?
 
 A virtual machine runs on a hypervisor, which is (definition). With a virtual machine, you have a virtual hardware layer, an 
@@ -59,12 +73,101 @@ entire operating system, and then libraries and applications on top of it. We ca
 ### Virtual Machine vs Containers
 Draw comparison between virtual machines
 
-## Host vs. Container
+Good diagram [here](https://www.youtube.com/watch?v=YsYzMPptB-k) at 13:53 to show VM vs. container. A hypervisor image is typically
+gigabytes, a container can be in the order of megabytes. When we talk about containers we talk about lightness. What are the limitations of VMs?
 
-Running on host, you are using software, libraries, and dependencies on the host
+ - Each requires CPU, storage, memory, and an entire OS
+ - More VMs == more resources
+ - Portability not guaranteed
+
+[comparison vms and containers slide 22](https://www.slideshare.net/Docker/introduction-to-docker-2017)
+
+### Host vs. Container
+
+Let's say we are running an application on a host. This means that we have one application on one physical server. This means:
+
+ - slower deployment
+ - more expensive, $ and resources
+ - hard to migrate
+ - hard to scale
+ - "locked in" to a vendor because to set up somewhere else, you have to recreate the entire thing.
+
+This is because you are using software, libraries, and dependencies on the host
+
+But with a container, all of that flips:
+
+ - quick deployment
+ - less expensive in terms of $ and resources 
+ - easy to migrate and scale
+ - not locked in
+
 The container is totally isolated - it brings all its dependencies in an environment
-isolated from the operating system.
+isolated from the operating system. [picture here](https://www.slideshare.net/Docker/introduction-to-docker-2017) on slide 18.
 
+### Linux Container API
+So if containers are so great, why did they only "become a thing"
+around 2014? It's because the linux containers API is pretty compiicated. Containers in linux are controlled by [here](https://www.youtube.com/watch?v=YsYzMPptB-k) picture at 18:10:
+
+Let's call this the kernel API, there are two things (picture at 24:45)
+
+ - cgroups: controls resources within the kernel (io, cpu, devices, memory, network). There is something called a "freezer" that you put a bunch of processes into and put them to sleep without worrying about resources between them.
+ - namespaces: pure isolation layer inside kernel. Most of time resources only belong to a single one (networking devices go in networking namespaces, ipc namespace for messages between containers, mount namespace for filesystem tree, either create a separate filesystem or use linux bind mounts to mount a piece of the host, pid namespace - init in linux needs to be running as pid 1 it isolates the process tree between containers, UTS namespace because each container needs a separate hostname, User namespace is important for "pretending to be root" without being root.)
+
+In early containers, you could break from a container and become root on the host.
+
+These core components are the same for all systems! They are unfortuntately very complex.
+
+A fun history fact - these two things were developed by different open source groups. This came from an agreement at a conference in 2011 called the Kernel Summit, literally a bunch of people sitting in a room that had both developed technologies they wanted added to the linux kernel, and had to go through component by component and argue their case for their thing. At the end we did get a single cohesive thing, but it had these very two different cgroups and namespaces. 
+
+**Important**
+everything that claims to be a container technology is basically orchestrating this cgroup and namespace system. That's it. 
+
+**Where are the namespaces?**
+
+Here :)
+
+```
+$ ls -l /proc/self/ns/
+total 0
+lrwxrwxrwx 1 vanessa vanessa 0 Sep 11 12:42 cgroup -> cgroup:[4026531835]
+lrwxrwxrwx 1 vanessa vanessa 0 Sep 11 12:42 ipc -> ipc:[4026531839]
+lrwxrwxrwx 1 vanessa vanessa 0 Sep 11 12:42 mnt -> mnt:[4026531840]
+lrwxrwxrwx 1 vanessa vanessa 0 Sep 11 12:42 net -> net:[4026532009]
+lrwxrwxrwx 1 vanessa vanessa 0 Sep 11 12:42 pid -> pid:[4026531836]
+lrwxrwxrwx 1 vanessa vanessa 0 Sep 11 12:42 pid_for_children -> pid:[4026531836]
+lrwxrwxrwx 1 vanessa vanessa 0 Sep 11 12:42 user -> user:[4026531837]
+lrwxrwxrwx 1 vanessa vanessa 0 Sep 11 12:42 uts -> uts:[4026531838]
+```
+
+**Where are the cgroups?**
+
+Here! Each cgroup is separately mountable. 
+
+```bash
+ls -l /sys/fs/cgroup
+total 0
+dr-xr-xr-x 6 root root  0 Aug 29 15:00 blkio
+lrwxrwxrwx 1 root root 11 Aug 29 15:00 cpu -> cpu,cpuacct
+lrwxrwxrwx 1 root root 11 Aug 29 15:00 cpuacct -> cpu,cpuacct
+dr-xr-xr-x 6 root root  0 Aug 29 15:00 cpu,cpuacct
+dr-xr-xr-x 3 root root  0 Aug 29 15:00 cpuset
+dr-xr-xr-x 6 root root  0 Aug 29 15:00 devices
+dr-xr-xr-x 3 root root  0 Aug 29 15:00 freezer
+dr-xr-xr-x 3 root root  0 Aug 29 15:00 hugetlb
+dr-xr-xr-x 6 root root  0 Aug 29 15:00 memory
+lrwxrwxrwx 1 root root 16 Aug 29 15:00 net_cls -> net_cls,net_prio
+dr-xr-xr-x 3 root root  0 Aug 29 15:00 net_cls,net_prio
+lrwxrwxrwx 1 root root 16 Aug 29 15:00 net_prio -> net_cls,net_prio
+dr-xr-xr-x 3 root root  0 Aug 29 15:00 perf_event
+dr-xr-xr-x 6 root root  0 Aug 29 15:00 pids
+dr-xr-xr-x 2 root root  0 Aug 29 15:00 rdma
+dr-xr-xr-x 6 root root  0 Aug 29 15:00 systemd
+```
+
+Each of these is a folder, and the
+simplest one is "freezer." The way we control cgroups is via file system calls.
+So, to make a cgroup called "test" I create a directory called test.
+To move a process as a task into a cgroup, I can echo it there.
 
 ## Introduction to Your Computer
 
@@ -178,8 +281,18 @@ a specific configuration file, for which a change could break everything.
 > I want dynamic and stateless
 
 You can create and throw away containers incrediby easy. It gives you the ability to do horizontal scaling.
-Because of these stateless workloads, we can talk about scheduling and clustering. 
+Because of these stateless workloads, we can talk about scheduling and clustering. Containers give us instant vertical scaling (up or down).
 
+> I want elasticity
+
+If you add a virtual machine, you need to allocate the entire set of resources in terms of memory and storage to the VM. With containers, you get elasticity. Since there is one kernel, adding a container doesn't need to create an entirely new resource because you are leveraging the resources from the host. When you put it under resource pressure, the kernel is optimized to deal with resource pressure. You can put on a physical system 3 times as many systems as you can a host provider (very useful for service providers!)
+
+## Container Providers
+Most people in the room that know about containers would readily
+say "Docker" when talking about "who did this first?" but actually
+it was a company called Parallels (now Odin) that organized the original meetings and container interests to lead to this common,
+upstream API. But it was Docker that harnassed it to run on 
+upstream containers. So they commonly get all the credit (and nobody has heard of Parallels, myself included).
 
 Resources:
 

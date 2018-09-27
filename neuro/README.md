@@ -23,7 +23,7 @@ notebooks) are provided.
  - [The Cognitive Atlas](https://www.cognitiveatlas.org)
  - [Neurosynth](http://neurosynth.org)
  - [Neurovault](https://www.neurovault.org)
- - [The Poldrack](Lab at Stanford: https://poldracklab.stanford.edu)
+ - [The Poldrack Lab at Stanford](https://poldracklab.stanford.edu)
  - [OpenNeuro](https://www.openneuro.org)
  - [Nimare](https://www.github.com/neurostuff/NiMare)
 
